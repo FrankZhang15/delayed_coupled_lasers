@@ -1,0 +1,33 @@
+import matplotlib.pyplot as plt
+import scipy as sp
+from pylab import linspace, array
+from ddeint import ddeint
+from scipy.optimize import fsolve
+import pylab
+import numpy as npy
+
+#%%
+
+kappa=0.2
+Cp=0.1*sp.pi
+alpha=2.6
+tao=0.2
+
+x = npy.linspace(-2,2,500)
+
+def y1(x):
+    y1=  0.2 * ((1+2.6**2)**0.5) * npy.sin(0.1*sp.pi+0.5*x+npy.arctan(2.6))
+    return y1
+def y2(x):
+    y2= -0.2 * ((1+2.6**2)**0.5) * npy.sin(0.1*sp.pi+0.5*x+npy.arctan(2.6))
+    return y2
+def y3(x):
+    y3 =x
+    return y3
+
+def find_Intersection(fun1,fun2,x0):
+    return fsolve(lambda x : fun1(x) - fun2(x),x0)
+result = find_Intersection(y1,y3,0.0)
+
+
+print(result)

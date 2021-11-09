@@ -1,0 +1,58 @@
+import matplotlib.pyplot as plt
+import scipy as sp
+from pylab import linspace, array
+from ddeint import ddeint
+from scipy.optimize import fsolve
+import pylab
+import numpy as npy
+
+tao_p=7.7*(10**(-12))
+result_w_in  =[]
+result_w_anti=[]
+normalised_Cp=[] #devided by pi to fit into X-axis
+
+'''Need to make the loop for Cp, set a=2.6'''
+
+'''w= +/- k(1+a^2)^0.5 x sin(Cp + tao*w + arctan(a))'''
+
+'''I seperate the equation into 2 parts, left hand side(y3) 
+   and right hand side(y1,y2). The '''
+
+        def y1(w):
+            y1=  k * ((1+5**2)**0.5) * npy.sin(Cp+0.2*w+npy.arctan(2.6))
+            return y1
+        def y2(w):
+            y2= -k * ((1+5**2)**0.5) * npy.sin(Cp+0.2*w+npy.arctan(2.6))
+            return y2
+        def y3(w):
+            y3 =w
+            return y3
+    
+        def find_Intersection_inphase  (fun1,fun3,w0):
+            return fsolve(lambda w : fun1(w) - fun3(w),w0)
+        
+        def find_Intersection_antiphase(fun2,fun3,w0):
+            return fsolve(lambda w:  fun2(w) - fun3(w),w0)
+        
+    
+    
+        result_in  = find_Intersection_inphase  (y1,y3,0.0)
+        result_anti= find_Intersection_antiphase(y2,y3,0.0)
+    
+        x = npy.linspace(-10,10,500)
+    
+        result_in_norm=result_in/tao_p
+        result_w_in.append(result_in_norm)
+    
+        result_anti_norm=result_anti/tao_p
+        result_w_anti.append(result_anti_norm)
+    
+        normalisation=Cp/sp.pi
+        normalised_Cp.append(normalisation)
+    
+    
+
+    plt.xlabel('Cp/pi')
+    plt.ylabel('frequency')
+    plt.plot(normalised_Cp,result_w_in)
+    plt.plot(normalised_Cp,result_w_anti)
